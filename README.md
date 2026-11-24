@@ -3,7 +3,7 @@
 A chess engine in 4 KB of Python, built for make.fun's
 "Build the strongest chess engine in 4 KB of Python" bounty.
 
-`main.py` (3,974 bytes) is the whole engine. It plays every game through
+`main.py` (3,963 bytes) is the whole engine. It plays every game through
 the env at `MAKEFUN_ENV_URL`: `POST /game {}` serves the game in play,
 `POST /move {game, move}` plays a move, and the loop ends when the env
 answers status `"done"`.
@@ -17,8 +17,10 @@ answers status `"done"`.
 - Move ordering: transposition-table move first, then MVV-LVA captures
   (most valuable victim, least valuable attacker), then the rest.
 - Evaluation: PeSTO middlegame piece-square tables (quantized to eighths,
-  base85-packed), tapered to a single score; no endgame tables, to fit
-  the size cap. Material values P=100 N=320 B=330 R=500 Q=900.
+  base85-packed), used as a single score; no endgame tables, to fit
+  the size cap — except the king table, which is the average of the
+  middlegame and endgame king tables so the king still centralizes
+  late in the game. Material values P=100 N=320 B=330 R=500 Q=900.
 - Fixed node budget (60,000 nodes per move), never a clock: the same
   position always gets the same move, so a trial's replay matches.
 
